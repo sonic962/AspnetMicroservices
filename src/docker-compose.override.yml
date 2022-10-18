@@ -76,7 +76,7 @@ services:
       - "8000:80"
 
   basket.api:
-    container_name: baskit.api
+    container_name: basket.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "CacheSettings:ConnectionString=basketdb:6379"
@@ -109,7 +109,7 @@ services:
       - "8003:80"
 
   ordering.api:
-    container_name: orderingapi
+    container_name: ordering.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "ConnectionStrings:OrderingConnectionString=Server=orderdb;Database=OrderDb;User Id=sa;Password=P@ssw0rd123456;"
@@ -119,3 +119,16 @@ services:
       - rabbitmq
     ports:
       - "8004:80"
+
+  ocelotapigw:
+    container_name: ocelotapigw
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - catalog.api
+      - basket.api
+      - discount.api
+      - ordering.api
+    ports:
+      - "8010:80"
+
